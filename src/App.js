@@ -38,6 +38,53 @@ export default function App() {
         },
     ];
 
+    const needs = [
+        {
+            id: 1,
+            name: 'Shannon',
+            need1: 'I need a garbage disposal',
+            need2: 'I need a new couch',
+            need3: 'I need groceries'
+        },
+        {
+            id: 2,
+            name:'MacKenzie',
+            need1: 'I need money',
+            need2: 'I need tires',
+            need3: 'I need books'
+        },
+        {
+            id: 3,
+            name:'McKayla',
+            need1: 'I need clothes',
+            need2: 'I need dog collars',
+            need3: 'I need a new piano'
+        },
+    ];
+
+    const wants = [
+        {
+        id: 1,
+            name: 'Shannon',
+            want1: 'I want a new motorcycle',
+            want2: 'I want a new shed',
+            want3: 'I want a new ladder'
+        },
+        {
+            id: 2,
+            name:'MacKenzie',
+            want1: 'I want a new car',
+            want2: 'I want a new apartment',
+            want3: 'I want a new dog'
+        },
+        {
+            id: 3,
+            name:'McKayla',
+            want1: 'I want a new house',
+            want2: 'I want a new clothes',
+            want3: 'I want a new kitty'
+        }
+    ]
     
     return (
         <Container>
@@ -64,10 +111,10 @@ export default function App() {
                         <Favorites favorites={favorites} />
                     </Route>
                     <Route path='/needs'>
-                        <Needs needs={['I need a spot cleaner','I need a vaccuum','I need a ladder']} />
+                        <Needs needs={needs} />
                     </Route>
-                    <Route path='/'>
-                        <Wants />
+                    <Route path='/wants'>
+                        <Wants wants={wants} />
                     </Route>
                 </Switch>
             </div>
@@ -76,23 +123,106 @@ export default function App() {
     );
 }
 
-function Wants() {
-    return <h2>This is what I want!</h2>
-}
 
-function Needs(props) {
-    const { needs } = props;
-return (
-    <div>
-        <ul>
-            {needs.map((need, index) => (
-            <li key={index}>{need}</li>
-            ))}
-        </ul>
-    </div>
-);
-}
 
+function Wants({ wants }) {
+    const match = useRouteMatch();
+    const findWantById = (id) => 
+        wants.filter((want) => want.id == id)[0];
+    return (
+        <div>
+            {wants.map((want, index) => {
+                return (
+                    <Alert key={index} variant='primary'> 
+                        <Link to={`${match.url}/${want.id}`}>
+                            {want.name}
+                        </Link>
+                    </Alert>
+                );
+            })}
+    
+    <Switch>
+        <Route 
+            path={`${match.path}/:wantId`}
+                render={(props) => (
+                    <Want
+                        {...props}
+                        data={findWantById(props.match.params.wantId)}
+                    />
+                )}
+            />
+        <Route path={match.path}>
+            <center><h2><i>Click on a name to see what they want</i></h2></center>
+        </Route>
+    </Switch>
+ </div>
+  );
+  }
+    
+    
+    function Want(props) {
+        const { data } = props;
+        return data == undefined ? <h1>404 Not Found</h1> : (
+            <Card>
+                <Card.Header><h2>{data.name}'s Christmas List</h2></Card.Header>
+                <Card.Body>
+                    <Card.Subtitle>{data.want1}</Card.Subtitle>
+                    <Card.Subtitle>{data.want2}</Card.Subtitle>
+                    <Card.Subtitle>{data.want3}</Card.Subtitle>
+        </Card.Body>
+         </Card>
+     );
+    }
+    
+    function Needs({ needs }) {
+        const match = useRouteMatch();
+        const findNeedById = (id) => 
+            needs.filter((need) => need.id == id)[0];
+        return (
+            <div>
+                {needs.map((need, index) => {
+                    return (
+                        <Alert key={index} variant='primary'> 
+                            <Link to={`${match.url}/${need.id}`}>
+                                {need.name}
+                            </Link>
+                        </Alert>
+                    );
+                })}
+        
+        <Switch>
+            <Route 
+                path={`${match.path}/:needId`}
+                    render={(props) => (
+                        <Need
+                            {...props}
+                            data={findNeedById(props.match.params.needId)}
+                        />
+                    )}
+                />
+            <Route path={match.path}>
+                <center><h2><i>Click on a name to see what they need</i></h2></center>
+            </Route>
+        </Switch>
+     </div>
+      );
+      }
+        
+        
+        function Need(props) {
+            const { data } = props;
+            return data == undefined ? <h1>404 Not Found</h1> : (
+                <Card>
+                    <Card.Header><h2>{data.name} Needs These</h2></Card.Header>
+                    <Card.Body>
+                        <Card.Subtitle>{data.need1}</Card.Subtitle>
+                        <Card.Subtitle>{data.need2}</Card.Subtitle>
+                        <Card.Subtitle>{data.need3}</Card.Subtitle>
+            </Card.Body>
+             </Card>
+         );
+        }
+        
 
 function Favorites({ favorites }) {
     const match = useRouteMatch();
