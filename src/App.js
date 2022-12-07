@@ -1,3 +1,5 @@
+//import React, Bootstrap, Jqueary, React-app, React-Router
+
 import React from 'react';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import Button from 'react-bootstrap/Button';
@@ -13,6 +15,7 @@ import {
     useRouteMatch
 }   from 'react-router-dom';
 
+//export different objects based on array
 export default function App() {
     const favorites = [
         {
@@ -86,6 +89,7 @@ export default function App() {
         }
     ]
     
+    //create buttons for each link to each new page
     return (
         <Container>
             <Router>
@@ -123,7 +127,7 @@ export default function App() {
     );
 }
 
-
+//create different functions for each link - to pop up based by id type in mock api
 
 function Wants({ wants }) {
     const match = useRouteMatch();
